@@ -36,6 +36,10 @@ public abstract class Kamar implements InfoDetail {
     public double getHargaDasar(){
         return hargaDasar;
     }
+    
+    public void tambahHargaDasar(double hargaDasar) {
+        this.hargaDasar += hargaDasar;
+    }
 
     public Penghuni getPenghuni(){
         return penghuni;
