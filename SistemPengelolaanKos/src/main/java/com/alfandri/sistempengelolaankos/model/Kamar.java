@@ -12,19 +12,15 @@ import com.alfandri.sistempengelolaankos.interfaces.InfoDetail;
  */
 public abstract class Kamar implements InfoDetail {
 
-    private final String nomorKamar;
-    private final double hargaDasar;
+    private final int nomorKamar;
+    private double hargaDasar;
     private Penghuni penghuni;
+    private static int jumlahKamar;
 
-    protected Kamar(String nomorKamar, double hargaDasar){
-        if(nomorKamar == null || nomorKamar.isBlank()){
-            throw new IllegalArgumentException("Nomor kamar tidak boleh kosong");
-        }
-        if(hargaDasar <= 0){
-            throw new IllegalArgumentException("Harga dasar harus lebih dari nol (0)");
-        }
-        this.nomorKamar = nomorKamar;
-        this.hargaDasar = hargaDasar;
+    protected Kamar(){
+        this.hargaDasar = 500000;
+        this.nomorKamar = (jumlahKamar + 1);
+        Kamar.jumlahKamar++;
     }
 
     public abstract String getTipe();
@@ -33,7 +29,7 @@ public abstract class Kamar implements InfoDetail {
 
     public abstract String getFasilitas();
 
-    public String getNomorKamar(){
+    public int getNomorKamar(){
         return nomorKamar;
     }
 
