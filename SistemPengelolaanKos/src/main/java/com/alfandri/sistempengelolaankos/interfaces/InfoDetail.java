@@ -9,5 +9,9 @@ package com.alfandri.sistempengelolaankos.interfaces;
  * @author USER
  */
 public interface InfoDetail {
-    
+    String getInfoDetail();
+
+    default void tampilkanINfo(){
+        System.out.println(getInfoDetail());
+    }
 }
