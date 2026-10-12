@@ -13,13 +13,26 @@ public class KamarPremium extends Kamar {
     public static final double HARGA_DEFAULT = 1_200_000;
     /** Biaya tambahan untuk fasilitas premium (WiFi + AC + kamar mandi dalam). */
     public static final double BIAYA_FASILITAS = 300_000;
+    private final double biayaFasilitas;
 
     public KamarPremium(String nomorKamar) {
-        super(nomorKamar, HARGA_DEFAULT);
+        this(nomorKamar, HARGA_DEFAULT, BIAYA_FASILITAS);
     }
 
     public KamarPremium(String nomorKamar, double hargaDasar) {
+        this(nomorKamar, hargaDasar, BIAYA_FASILITAS);
+    }
+
+    public KamarPremium(String nomorKamar, double hargaDasar, double biayaFasilitas) {
         super(nomorKamar, hargaDasar);
+        if (biayaFasilitas < 0) {
+            throw new IllegalArgumentException("Biaya fasilitas tidak boleh negatif");
+        }
+        this.biayaFasilitas = biayaFasilitas;
+    }
+
+    public double getBiayaFasilitas() {
+        return biayaFasilitas;
     }
 
     @Override
@@ -29,7 +42,7 @@ public class KamarPremium extends Kamar {
 
     @Override
     public double hitungHargaSewa() {
-        return getHargaDasar() + BIAYA_FASILITAS;
+        return getHargaDasar() + biayaFasilitas;
     }
 
     @Override
