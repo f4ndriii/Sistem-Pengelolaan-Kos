@@ -1,7 +1,7 @@
 # Sistem-Pengelolaan-Kos
 
-# KELOMPOK 8
-# Alfandri Triyandami
-# Maria Ulfa
-# Nadya Sulfa Ul-zannah
-# Nathan Akbar
+ KELOMPOK 8:
+ 1. Alfandri Triyandami
+ 2. Maria Ulfa
+ 3. Nadya Sulfa Ul-zannah
+ 4. Nathan Akbar
