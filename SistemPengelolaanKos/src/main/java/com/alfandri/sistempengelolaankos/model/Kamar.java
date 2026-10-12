@@ -13,7 +13,7 @@ import com.alfandri.sistempengelolaankos.interfaces.InfoDetail;
 public abstract class Kamar implements InfoDetail {
 
     private final int nomorKamar;
-    private double hargaDasar;
+    private final double hargaDasar;
     private Penghuni penghuni;
     private static int jumlahKamar;
 
@@ -35,10 +35,6 @@ public abstract class Kamar implements InfoDetail {
 
     public double getHargaDasar(){
         return hargaDasar;
-    }
-    
-    public void tambahHargaDasar(double hargaDasar) {
-        this.hargaDasar += hargaDasar;
     }
 
     public Penghuni getPenghuni(){

@@ -10,7 +10,6 @@ public class KamarPremium extends Kamar {
 
     public KamarPremium() {
         super();
-        tambahHargaDasar(BIAYA_FASILITAS);
     }
 
     @Override
