@@ -12,46 +12,27 @@ import java.time.format.DateTimeFormatter;
  * @author USER
  */
 public class Penghuni implements InfoDetail {
+    private static int jumlahPenghuni;
     
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    private final String id;
+    private final int id;
     private String nama;
     private String noHp;
     private final LocalDate tanggalMasuk;
 
-    public Penghuni(String id, String nama, String noHp){
-        this(id, nama, noHp, LocalDate.now());
+    public Penghuni(String nama, String noHp){
+        this.id = ++jumlahPenghuni;
+        this.nama = nama;
+        this.noHp = noHp;
+        this.tanggalMasuk = LocalDate.now();
     }
 
-    public Penghuni(String id, String nama, String noHp, LocalDate tanggalMasuk){
-        if (nama == null || nama.isBlank()){
-            throw new IllegalArgumentException("Nama penghuni tidak boleh kosong");
-        }
-        if (id == null || id.isBlank()){
-            throw new IllegalArgumentException("ID penghuni tidak boleh kosong");
-        }
-        if (tanggalMasuk == null){
-            throw new IllegalArgumentException("Tanggal masuk tidak boleh null");
-        }
-        this.id = id;
-        this.nama = nama.trim();
-        this.noHp = noHp == null ? "-" : noHp.trim();
-        this.tanggalMasuk = tanggalMasuk;
-    }
-
-    public String getId(){
+    public int getId(){
         return id;
     }
 
     public String getNama(){
         return nama;
-    }
-
-    public void setNama(String nam){
-        if (nam == null || nam.isBlank()){
-            throw new IllegalArgumentException("Nama penghuni tidak boleh kosong");
-        }
-        this.nama = nam.trim();
     }
 
     public String getNoHp(){
