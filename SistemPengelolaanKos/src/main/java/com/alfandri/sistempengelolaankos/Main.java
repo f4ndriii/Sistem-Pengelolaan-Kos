@@ -1,15 +1,12 @@
 package com.alfandri.sistempengelolaankos;
 
-import com.alfandri.sistempengelolaankos.model.Kamar;
-import com.alfandri.sistempengelolaankos.model.KamarPremium;
-import com.alfandri.sistempengelolaankos.model.KamarStandard;
-import com.alfandri.sistempengelolaankos.model.KosManager;
-import com.alfandri.sistempengelolaankos.model.Pembayaran;
-import com.alfandri.sistempengelolaankos.model.Penghuni;
+import com.alfandri.sistempengelolaankos.model.*;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -19,27 +16,27 @@ public class Main {
 
     private static final Scanner in = new Scanner(System.in);
     private static final KosManager kos = new KosManager();
+    private static final Locale LOCALE_ID = Locale.forLanguageTag("id-ID");
 
     public static void main(String[] args) {
         isiDataAwal();
-        boolean jalan = true;
-        while (jalan) {
+        while (true) {
             tampilkanMenu();
             String pilihan = baca("Pilih menu");
+            if ("0".equals(pilihan)) break;
             try {
                 switch (pilihan) {
-                    case "1" -> daftarKamar();
-                    case "2" -> tambahKamar();
-                    case "3" -> hapusKamar();
-                    case "4" -> checkIn();
-                    case "5" -> checkOut();
-                    case "6" -> daftarPenghuni();
-                    case "7" -> catatPembayaran();
-                    case "8" -> riwayatPembayaran();
-                    case "9" -> tunggakan();
+                    case "1"  -> daftarKamar();
+                    case "2"  -> tambahKamar();
+                    case "3"  -> hapusKamar();
+                    case "4"  -> checkIn();
+                    case "5"  -> checkOut();
+                    case "6"  -> daftarPenghuni();
+                    case "7"  -> catatPembayaran();
+                    case "8"  -> riwayatPembayaran();
+                    case "9"  -> tunggakan();
                     case "10" -> laporan();
-                    case "0" -> jalan = false;
-                    default -> System.out.println("Menu tidak valid.");
+                    default   -> System.out.println("Menu tidak valid.");
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println("[ERROR] " + e.getMessage());
@@ -49,18 +46,20 @@ public class Main {
     }
 
     private static void tampilkanMenu() {
-        System.out.println("\n===== SISTEM PENGELOLAAN KOS =====");
-        System.out.println(" 1. Daftar kamar");
-        System.out.println(" 2. Tambah kamar");
-        System.out.println(" 3. Hapus kamar");
-        System.out.println(" 4. Check-in penghuni");
-        System.out.println(" 5. Check-out penghuni");
-        System.out.println(" 6. Daftar penghuni");
-        System.out.println(" 7. Catat pembayaran");
-        System.out.println(" 8. Riwayat pembayaran");
-        System.out.println(" 9. Tunggakan bulan ini");
-        System.out.println("10. Laporan pendapatan");
-        System.out.println(" 0. Keluar");
+        System.out.println("""
+
+            ===== SISTEM PENGELOLAAN KOS =====
+             1. Daftar kamar
+             2. Tambah kamar
+             3. Hapus kamar
+             4. Check-in penghuni
+             5. Check-out penghuni
+             6. Daftar penghuni
+             7. Catat pembayaran
+             8. Riwayat pembayaran
+             9. Tunggakan bulan ini
+            10. Laporan pendapatan
+             0. Keluar""");
     }
 
     private static void isiDataAwal() {
@@ -73,7 +72,7 @@ public class Main {
     // ---------- Input helper ----------
     private static String baca(String label) {
         System.out.print(label + ": ");
-        return in.hasNextLine() ? in.nextLine().trim() : "0";
+        return in.hasNextLine() ? in.nextLine().trim() : "";
     }
 
     private static double bacaAngka(String label) {
@@ -85,32 +84,26 @@ public class Main {
         }
     }
 
-    private static Month bacaBulan(String label, Month bawaan) {
-        String s = baca(label + " (1-12, kosong = bulan ini)");
-        if (s.isEmpty()) {
-            return bawaan;
-        }
+    private static Month bacaBulan() {
+        String s = baca("Bulan (1-12, kosong = bulan ini)");
         try {
-            return Month.of(Integer.parseInt(s));
-        } catch (RuntimeException e) {
+            return s.isEmpty() ? LocalDate.now().getMonth() : Month.of(Integer.parseInt(s));
+        } catch (Exception e) {
             throw new IllegalArgumentException("Bulan harus 1-12");
         }
     }
 
-    private static Year bacaTahun(String label, Year bawaan) {
-        String s = baca(label + " (kosong = tahun ini)");
-        if (s.isEmpty()) {
-            return bawaan;
-        }
+    private static Year bacaTahun() {
+        String s = baca("Tahun (kosong = tahun ini)");
         try {
-            return Year.of(Integer.parseInt(s));
-        } catch (RuntimeException e) {
+            return s.isEmpty() ? Year.now() : Year.of(Integer.parseInt(s));
+        } catch (Exception e) {
             throw new IllegalArgumentException("Tahun tidak valid");
         }
     }
 
     private static String namaBulan(Month bulan) {
-        return bulan.getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.forLanguageTag("id-ID"));
+        return bulan.getDisplayName(TextStyle.FULL, LOCALE_ID);
     }
 
     // ---------- Fitur ----------
@@ -120,10 +113,10 @@ public class Main {
             System.out.println("Belum ada kamar.");
             return;
         }
-        for (Kamar k : semua) {
+        semua.forEach(k -> {
             System.out.println("-----------------------------");
-            k.tampilkanINfo();
-        }
+            k.tampilkanInfo();
+        });
         System.out.println("-----------------------------");
         System.out.println("Terisi: " + kos.getJumlahTerisi() + " / " + semua.size());
     }
@@ -132,14 +125,12 @@ public class Main {
         String nomor = baca("Nomor kamar");
         String tipe = baca("Tipe (1 = Standard, 2 = Premium)");
         double harga = bacaAngka("Harga dasar per bulan");
-        if (tipe.equals("1")) {
-            kos.tambahKamar(new KamarStandard(nomor, harga));
-        } else if (tipe.equals("2")) {
-            double fasilitas = bacaAngka("Biaya fasilitas khusus");
-            kos.tambahKamar(new KamarPremium(nomor, harga, fasilitas));
-        } else {
-            throw new IllegalArgumentException("Tipe kamar tidak valid");
-        }
+        Kamar k = switch (tipe) {
+            case "1" -> new KamarStandard(nomor, harga);
+            case "2" -> new KamarPremium(nomor, harga, bacaAngka("Biaya fasilitas khusus"));
+            default -> throw new IllegalArgumentException("Tipe kamar tidak valid");
+        };
+        kos.tambahKamar(k);
         System.out.println("Kamar " + nomor + " berhasil ditambahkan.");
     }
 
@@ -156,16 +147,15 @@ public class Main {
             return;
         }
         System.out.println("Kamar kosong:");
-        for (Kamar k : kosong) {
-            System.out.println(" - " + k.getNomorKamar() + " (" + k.getTipe() + ") "
-                    + Pembayaran.formatRupiah(k.hitungHargaSewa()));
-        }
+        kosong.forEach(k -> System.out.println(" - " + k.getNomorKamar() + " (" + k.getTipe() + ") "
+                + Pembayaran.formatRupiah(k.hitungHargaSewa())));
+
         String nomor = baca("Nomor kamar");
         String nama = baca("Nama penghuni");
         String hp = baca("No. HP");
         Penghuni p = kos.checkIn(nama, hp, nomor);
         System.out.println("Check-in berhasil:");
-        p.tampilkanINfo();
+        p.tampilkanInfo();
     }
 
     private static void checkOut() {
@@ -180,21 +170,18 @@ public class Main {
             System.out.println("Belum ada penghuni.");
             return;
         }
-        for (Penghuni p : semua) {
+        semua.forEach(p -> {
             System.out.println("-----------------------------");
-            p.tampilkanINfo();
+            p.tampilkanInfo();
             System.out.println("Kamar     : " + kos.cariKamarPenghuni(p.getId()).getNomorKamar());
-        }
+        });
     }
 
     private static void catatPembayaran() {
-        LocalDate now = LocalDate.now();
         String nomor = baca("Nomor kamar");
-        Month bulan = bacaBulan("Bulan", now.getMonth());
-        Year tahun = bacaTahun("Tahun", Year.of(now.getYear()));
-        Pembayaran pay = kos.bayar(nomor, bulan, tahun);
+        Pembayaran pay = kos.bayar(nomor, bacaBulan(), bacaTahun());
         System.out.println("Pembayaran tercatat:");
-        pay.tampilkanINfo();
+        pay.tampilkanInfo();
     }
 
     private static void riwayatPembayaran() {
@@ -203,32 +190,27 @@ public class Main {
             System.out.println("Belum ada pembayaran.");
             return;
         }
-        for (Pembayaran pay : semua) {
+        semua.forEach(pay -> {
             System.out.println("-----------------------------");
-            pay.tampilkanINfo();
-        }
+            pay.tampilkanInfo();
+        });
     }
 
     private static void tunggakan() {
         LocalDate now = LocalDate.now();
-        Month bulan = now.getMonth();
-        Year tahun = Year.of(now.getYear());
-        List<Kamar> belum = kos.getTunggakan(bulan, tahun);
+        List<Kamar> belum = kos.getTunggakan(now.getMonth(), Year.of(now.getYear()));
         if (belum.isEmpty()) {
             System.out.println("Semua penghuni sudah membayar bulan ini.");
             return;
         }
-        System.out.println("Belum membayar (" + namaBulan(bulan) + " " + tahun + "):");
-        for (Kamar k : belum) {
-            System.out.println(" - Kamar " + k.getNomorKamar() + " | " + k.getPenghuni().getNama()
-                    + " | " + Pembayaran.formatRupiah(k.hitungHargaSewa()));
-        }
+        System.out.println("Belum membayar (" + namaBulan(now.getMonth()) + " " + now.getYear() + "):");
+        belum.forEach(k -> System.out.println(" - Kamar " + k.getNomorKamar() + " | "
+                + k.getPenghuni().getNama() + " | " + Pembayaran.formatRupiah(k.hitungHargaSewa())));
     }
 
     private static void laporan() {
-        LocalDate now = LocalDate.now();
-        Month bulan = bacaBulan("Bulan", now.getMonth());
-        Year tahun = bacaTahun("Tahun", Year.of(now.getYear()));
+        Month bulan = bacaBulan();
+        Year tahun = bacaTahun();
         System.out.println("Pendapatan " + namaBulan(bulan) + " " + tahun + " : "
                 + Pembayaran.formatRupiah(kos.getPendapatan(bulan, tahun)));
         System.out.println("Total seluruh pendapatan   : " + Pembayaran.formatRupiah(kos.getTotalPendapatan()));

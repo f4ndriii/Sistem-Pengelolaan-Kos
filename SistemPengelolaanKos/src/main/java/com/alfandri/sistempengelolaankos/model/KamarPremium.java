@@ -5,7 +5,19 @@ package com.alfandri.sistempengelolaankos.model;
  */
 public class KamarPremium extends Kamar {
 
+    public static final double HARGA_DEFAULT = 1_200_000;
+    /** Biaya tambahan untuk fasilitas premium (WiFi + AC + kamar mandi dalam). */
+    public static final double BIAYA_FASILITAS = 300_000;
+
     private final double biayaFasilitasKhusus;
+
+    public KamarPremium(String nomorKamar) {
+        this(nomorKamar, HARGA_DEFAULT, BIAYA_FASILITAS);
+    }
+
+    public KamarPremium(String nomorKamar, double hargaDasar) {
+        this(nomorKamar, hargaDasar, BIAYA_FASILITAS);
+    }
 
     public KamarPremium(String nomorKamar, double hargaDasar, double biayaFasilitasKhusus) {
         super(nomorKamar, hargaDasar);
@@ -31,7 +43,7 @@ public class KamarPremium extends Kamar {
 
     @Override
     public String getFasilitas() {
-        return "Kasur, lemari, AC, WiFi, kamar mandi dalam";
+        return "Kasur, lemari, meja belajar, AC, kamar mandi dalam, WiFi";
     }
 
     @Override
