@@ -5,30 +5,12 @@ package com.alfandri.sistempengelolaankos.model;
  */
 public class KamarPremium extends Kamar {
 
-    public static final double HARGA_DEFAULT = 1_200_000;
     /** Biaya tambahan untuk fasilitas premium (WiFi + AC + kamar mandi dalam). */
     public static final double BIAYA_FASILITAS = 300_000;
 
-    private final double biayaFasilitasKhusus;
-
-    public KamarPremium(String nomorKamar) {
-        this(nomorKamar, HARGA_DEFAULT, BIAYA_FASILITAS);
-    }
-
-    public KamarPremium(String nomorKamar, double hargaDasar) {
-        this(nomorKamar, hargaDasar, BIAYA_FASILITAS);
-    }
-
-    public KamarPremium(String nomorKamar, double hargaDasar, double biayaFasilitasKhusus) {
-        super(nomorKamar, hargaDasar);
-        if (biayaFasilitasKhusus < 0) {
-            throw new IllegalArgumentException("Biaya fasilitas tidak boleh negatif");
-        }
-        this.biayaFasilitasKhusus = biayaFasilitasKhusus;
-    }
-
-    public double getBiayaFasilitasKhusus() {
-        return biayaFasilitasKhusus;
+    public KamarPremium() {
+        super();
+        tambahHargaDasar(BIAYA_FASILITAS);
     }
 
     @Override
@@ -38,7 +20,7 @@ public class KamarPremium extends Kamar {
 
     @Override
     public double hitungHargaSewa() {
-        return getHargaDasar() + biayaFasilitasKhusus;
+        return getHargaDasar() + BIAYA_FASILITAS;
     }
 
     @Override
@@ -50,6 +32,6 @@ public class KamarPremium extends Kamar {
     public String getInfoDetail() {
         return super.getInfoDetail() + "\n"
              + "Rincian     : dasar " + Pembayaran.formatRupiah(getHargaDasar())
-             + " + fasilitas " + Pembayaran.formatRupiah(biayaFasilitasKhusus);
+             + " + fasilitas " + Pembayaran.formatRupiah(BIAYA_FASILITAS);
     }
 }
