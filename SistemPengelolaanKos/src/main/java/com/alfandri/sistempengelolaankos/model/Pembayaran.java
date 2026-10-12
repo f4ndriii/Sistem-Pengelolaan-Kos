@@ -30,6 +30,9 @@ public class Pembayaran implements InfoDetail{
         if(jumlah <= 0){
             throw new IllegalArgumentException("Jumlah pembayaran harus lebih dari nol (0)");
         }
+        if(penghuni == null || nomorKamar == null || bulan == null || tahun == null){
+            throw new IllegalArgumentException("Data pembayaran tidak lengkap");
+        }
         this.idPembayaran = idPembayaran;
         this.penghuni = penghuni;
         this.nomorKamar = nomorKamar;
