@@ -11,7 +11,11 @@ package com.alfandri.sistempengelolaankos.interfaces;
 public interface InfoDetail {
     String getInfoDetail();
 
-    default void tampilkanINfo(){
+    default void tampilkanInfo() {
         System.out.println(getInfoDetail());
+    }
+
+    default void tampilkanINfo(){
+        tampilkanInfo();
     }
 }

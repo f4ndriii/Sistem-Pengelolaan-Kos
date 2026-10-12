@@ -27,6 +27,12 @@ public class Penghuni implements InfoDetail {
         if (nama == null || nama.isBlank()){
             throw new IllegalArgumentException("Nama penghuni tidak boleh kosong");
         }
+        if (id == null || id.isBlank()){
+            throw new IllegalArgumentException("ID penghuni tidak boleh kosong");
+        }
+        if (tanggalMasuk == null){
+            throw new IllegalArgumentException("Tanggal masuk tidak boleh null");
+        }
         this.id = id;
         this.nama = nama.trim();
         this.noHp = noHp == null ? "-" : noHp.trim();
@@ -42,10 +48,10 @@ public class Penghuni implements InfoDetail {
     }
 
     public void setNama(String nam){
-        if (nama == null || nam.isBlank()){
+        if (nam == null || nam.isBlank()){
             throw new IllegalArgumentException("Nama penghuni tidak boleh kosong");
         }
-        this.nama = nama.trim();
+        this.nama = nam.trim();
     }
 
     public String getNoHp(){
@@ -53,7 +59,7 @@ public class Penghuni implements InfoDetail {
     }
 
     public void setNoHp(String noHp){
-        this.noHp = noHp;
+        this.noHp = (noHp == null || noHp.isBlank()) ? "-" : noHp.trim();
     }
 
     public LocalDate getTanggalMasuk(){
@@ -62,9 +68,9 @@ public class Penghuni implements InfoDetail {
 
     @Override 
     public String getInfoDetail(){
-        return "ID      : " + id + "\n"
-            + "Nama     : " + nama + "\n"
-            + "No. Hp   : " + noHp + "\n"
-            +"Masuk     : " + tanggalMasuk.format(FORMAT);
+        return "ID        : " + id + "\n"
+            + "Nama      : " + nama + "\n"
+            + "No. Hp    : " + noHp + "\n"
+            + "Masuk     : " + tanggalMasuk.format(FORMAT);
     }
 }
