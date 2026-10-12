@@ -5,14 +5,8 @@ package com.alfandri.sistempengelolaankos.model;
  */
 public class KamarStandard extends Kamar {
 
-    public static final double HARGA_DEFAULT = 800_000;
-
-    public KamarStandard(String nomorKamar) {
-        super(nomorKamar, HARGA_DEFAULT);
-    }
-
-    public KamarStandard(String nomorKamar, double hargaDasar) {
-        super(nomorKamar, hargaDasar);
+    public KamarStandard() {
+        super();
     }
 
     @Override
