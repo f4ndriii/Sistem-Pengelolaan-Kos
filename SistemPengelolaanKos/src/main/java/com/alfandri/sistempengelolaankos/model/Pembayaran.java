@@ -10,79 +10,85 @@ import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import com.alfandri.sistempengelolaankos.interfaces.InfoDetail;
+import java.text.NumberFormat;
+import java.time.format.TextStyle;
 
 /**
  *
  * @author USER
  */
-public class Pembayaran implements InfoDetail{
+public class Pembayaran implements InfoDetail {
 
-    private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter FORMAT =
+            DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
     private final String idPembayaran;
-    private Penghuni penghuni;
-    private String nomorKamar;
-    private final Month bulan;
-    private final Year tahun;
-    private final double jumlah;
+    private final Penghuni penghuni;
+    private final Kamar kamar;
+    private final String bulanBayar;
     private final LocalDate tanggalBayar;
+    private final double jumlahBayar;
 
-    public Pembayaran(String idPembayaran, Penghuni penghuni, String nomorKamar, Month bulan, Year tahun, double jumlah){
-        if(jumlah <= 0){
-            throw new IllegalArgumentException("Jumlah pembayaran harus lebih dari nol (0)");
+    public Pembayaran(String idPembayaran, Kamar kamar,
+                      String bulanBayar, double jumlahBayar) {
+
+        if (idPembayaran == null || idPembayaran.isBlank()) {
+            throw new IllegalArgumentException(
+                    "ID pembayaran tidak boleh kosong");
         }
-        if(penghuni == null || nomorKamar == null || bulan == null || tahun == null){
-            throw new IllegalArgumentException("Data pembayaran tidak lengkap");
+
+        if (kamar == null || !kamar.isTerisi()) {
+            throw new IllegalArgumentException(
+                    "Kamar harus terisi penghuni");
         }
+
+        if (bulanBayar == null || bulanBayar.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Bulan pembayaran tidak boleh kosong");
+        }
+
+        if (jumlahBayar < 0) {
+            throw new IllegalArgumentException(
+                    "Jumlah pembayaran tidak boleh negatif");
+        }
+
         this.idPembayaran = idPembayaran;
-        this.penghuni = penghuni;
-        this.nomorKamar = nomorKamar;
-        this.bulan = bulan;
-        this.tahun = tahun;
-        this.jumlah = jumlah;
+        this.kamar = kamar;
+        this.penghuni = kamar.getPenghuni();
+        this.bulanBayar = bulanBayar;
         this.tanggalBayar = LocalDate.now();
+        this.jumlahBayar = jumlahBayar;
     }
 
-    public String getIdPembayaran(){
-        return idPembayaran;
+    public double hitungTagihan() {
+        return kamar.hitungHargaSewa();
     }
 
-    public Penghuni getPenghuni(){
-        return penghuni;
+    public String getStatus() {
+        return jumlahBayar >= hitungTagihan()
+                ? "LUNAS" : "BELUM LUNAS";
     }
 
-    public String getNomorKamar(){
-        return nomorKamar;
+    public static String formatRupiah(double nominal) {
+        NumberFormat format = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID"));
+
+        return format.format(nominal);
     }
 
-    public Month getBulan(){
-        return bulan;
-    }
-
-    public Year getTahun(){
-        return tahun;
-    }
-
-    public double getJumlah(){
-        return jumlah;
-    }
-
-    public LocalDate getTanggalBayar(){
-        return tanggalBayar;
-    }
-
-    public static String formatRupiah(double nilai) {
-    return "Rp " + String.format(java.util.Locale.forLanguageTag("id-ID"), "%,.0f", nilai
-    );
-}
-
-    @Override 
-    public String getInfoDetail(){
-        return "ID Bayar : " + idPembayaran + "\n"
-             + "Penghuni : " + penghuni.getNama() + "\n"
-             + "Kamar    : " + nomorKamar + "\n"
-             + "Periode  : " + bulan.getDisplayName(java.time.format.TextStyle.FULL, Locale.forLanguageTag("id-ID"))
-                              + " " + tahun + "\n"
-             + "Jumlah   : " + formatRupiah(jumlah) + "\n"
-             + "Tgl Bayar: " + tanggalBayar.format(FORMAT);
+    @Override
+    public String getInfoDetail() {
+        return "ID Pembayaran : " + idPembayaran + "\n"
+             + "Nama Penghuni : " + penghuni.getNama() + "\n"
+             + "Nomor Kamar   : " + kamar.getNomorKamar() + "\n"
+             + "Tipe Kamar    : " + kamar.getTipe() + "\n"
+             + "Bulan Bayar   : " + bulanBayar + "\n"
+             + "Tanggal Bayar : "
+             + tanggalBayar.format(FORMAT) + "\n"
+             + "Tagihan       : "
+             + formatRupiah(hitungTagihan()) + "\n"
+             + "Jumlah Bayar  : "
+             + formatRupiah(jumlahBayar) + "\n"
+             + "Status        : " + getStatus();
     }
 }
+
