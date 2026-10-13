@@ -1,12 +1,6 @@
 package com.alfandri.sistempengelolaankos;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.Year;
-import java.time.format.TextStyle;
-import java.util.List;
-import java.util.Locale;
-import java.util.Scanner;
 
+import java.util.Scanner;
 import com.alfandri.sistempengelolaankos.model.Kamar;
 import com.alfandri.sistempengelolaankos.model.KamarPremium;
 import com.alfandri.sistempengelolaankos.model.KamarStandard;

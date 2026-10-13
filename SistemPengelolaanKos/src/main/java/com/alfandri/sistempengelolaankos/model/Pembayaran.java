@@ -5,13 +5,10 @@
 package com.alfandri.sistempengelolaankos.model;
 
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import com.alfandri.sistempengelolaankos.interfaces.InfoDetail;
 import java.text.NumberFormat;
-import java.time.format.TextStyle;
 
 /**
  *

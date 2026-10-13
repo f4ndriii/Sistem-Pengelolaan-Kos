@@ -1,12 +1,8 @@
 package com.alfandri.sistempengelolaankos.model;
 
-import java.time.Month;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Pengelola utama: menyimpan kamar, penghuni, dan riwayat pembayaran.
